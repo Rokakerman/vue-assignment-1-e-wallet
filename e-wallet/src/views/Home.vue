@@ -50,12 +50,14 @@ export default {
   methods: {
     loadList() {
       this.storage =  JSON.parse(localStorage.getItem('cards'))
-      this.card = this.storage[0]
       if (!this.storage) {
         const stContent = [];
-        this.storage.setItem("cards", JSON.stringify(stContent));
+        localStorage.setItem("cards", JSON.stringify(stContent));
+        this.storage = JSON.parse(localStorage.getItem('cards'))
         console.log('local storage created')
+        return
       } 
+      return this.card = this.storage[0]
     },
     displayCard(index) {
       this.storage = JSON.parse(localStorage.getItem('cards'))
