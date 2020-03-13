@@ -1,6 +1,6 @@
 <template>
   <div class="card-form">
-      <label class="card-form-label">CARD NUMBER</label>
+      <label class="card-form-label">CARD NUMBER </label>
       <input type="number" v-model="cardNr" v-on:keyup="fullCardNumber" class="input-field" placeholder="Card Number" maxlength="16"/>
       <label class="card-form-label">CARDHOLDER NAME</label>
       <input type="text" v-model="cardHolder" v-on:keyup="sendCardHolder" class="input-field" placeholder="Your Fullname"/>
@@ -14,20 +14,32 @@
             <input type="number" v-model="cardCcv" v-on:keyup="sendCardCcv" class="fracture-input-field-right" placeholder="CCV"/> 
         </div>
         </figure>
-        <article class="vendor-wrapper">
-            <figure class="vendor-wrapper-figure">
-                <label class="card-form-label-bottom">VENDOR</label>
-                <div v-on:click="sendCardVendor(cardVendor[0])" class="vendor-option"> {{cardVendor[0]}} </div>
-            </figure >
-            <figure class="vendor-wrapper-figure">
-                <label class="card-form-label-bottom">VENDOR</label>
-                <div v-on:click="sendCardVendor(cardVendor[1])" class="vendor-option"> {{cardVendor[1]}} </div>
-            </figure>
-            <figure class="vendor-wrapper-figure">
-                <label class="card-form-label-bottom">VENDOR</label>
-                <div v-on:click="sendCardVendor(cardVendor[2])" class="vendor-option"> {{cardVendor[2]}} </div>
-            </figure>
-        </article>
+        <div class="vendor-dropdown">
+            <span class=""> <i class="fas fa-caret-down"></i> </span>
+            <div class="vendor-dropdown-content">
+                <figure class="vendor-wrapper-figure">
+                    <div v-on:click="sendCardVendor(cardVendor[0])" class="vendor-option bitcoin-bg"> 
+                        <p class="vendor-name vendor-name-bitcoin">BITCOIN INC</p> <div> <img class="vendor-icon" v-bind:src="cardVendor[0].vendor" /> </div>
+                    </div>
+                </figure >
+                <figure class="vendor-wrapper-figure">
+                    <div v-on:click="sendCardVendor(cardVendor[1])" class="vendor-option ninja-bg"> 
+                        <p class="vendor-name">NINJA BANK </p> <div> <img class="vendor-icon" v-bind:src="cardVendor[1].vendor"> </div> 
+                    </div>
+                </figure>
+                <figure class="vendor-wrapper-figure">
+                    <div v-on:click="sendCardVendor(cardVendor[2])" class="vendor-option evilcorp-bg"> 
+                        <p class="vendor-name">EVIL CORP</p> <div> <img class="vendor-icon" v-bind:src="cardVendor[2].vendor"/> </div>
+                    </div>
+                </figure>
+                <figure class="vendor-wrapper-figure">
+                    <div v-on:click="sendCardVendor(cardVendor[3])" class="vendor-option block-chain-bg"> 
+                        <p class="vendor-name">BLOCK CHAIN INC</p> <div> <img class="vendor-icon" v-bind:src="cardVendor[3].vendor"/> </div>
+                    </div>
+                </figure>
+            </div>
+        </div>
+
   </div>
 </template>
 
@@ -42,7 +54,12 @@ export default {
             cardHolder: 'Yeah',
             cardExp: '',
             cardCcv: NaN,
-            cardVendor: ['$', '£', '#']
+            cardVendor: [
+                {vendor: require('../assets/bitcoin.png'), bgcolor: '#FFAE34', textColor: '#000000'},
+                {vendor: require('../assets/ninja.png'), bgcolor: '#222222', textColor: '#FFFFFF'},
+                {vendor: require('../assets/evil.png'), bgcolor: '#F33355', textColor: '#FFFFFF'},
+                {vendor: require('../assets/chain.png'), bgcolor: '#8B58F9', textColor: '#FFFFFF'}
+                ],
         }
     },
     computed: {
@@ -55,14 +72,14 @@ export default {
                 return alert('Maxium character amount preceded')
             }
             if (this.cardHolder.match(letters)) {
-                console.log('1: This is a letter')
+                //console.log('1: This is a letter')
                 return this.$emit("sendCardHolder", this.cardHolder)
             }
             if (this.cardHolder.match(' ')) {
-                console.log('2: This isa blank space')
+                //console.log('2: This isa blank space')
             }
             if (/\d/.test(this.cardHolder) == true) {
-                console.log('3: ')
+                //console.log('3: ')
                 return alert("Your name can not contain number's");
             }
             return this.$emit("sendCardHolder", this.cardHolder)
@@ -105,7 +122,6 @@ export default {
             return this.$emit("sendCardCcv", this.cardCcv)
         },
         sendCardVendor(param) {
-            console.log(param)
             return this.$emit("sendCardVendor", param)
         },
         fullCardNumber() {
@@ -122,8 +138,6 @@ export default {
                 this.array.push(this.cardNr) 
                 this.cardNr = ''
                 this.$emit('sendCardNr', {number: this.array.join(' ')})
-                console.log(this.array.join(' '))  
-                console.log(this.array.length)  
             }
         }
     }
@@ -132,11 +146,12 @@ export default {
 
 <style>
 .card-form {
-    height: 50vh;
+    height: 44vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    margin-top: 20px;
 }
 
 .card-form-label {
@@ -155,9 +170,9 @@ export default {
 }
 
 .card-form-label-bottom {
-    font-size: 12px;
+    /*font-size: 12px;
     align-self:flex-start;
-    margin: 0px 40px -10px 0px;
+    margin: 0px 40px -10px 0px;*/
 }
 
 .input-field-bottom {
@@ -223,27 +238,97 @@ export default {
     border-radius: 5px;
 }
 
-.vendor-wrapper {
-    display: flex;
+.vendor-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    height: 30px;
+    width: 90%;
+    border: solid black 2px;
+    border-radius: 5px;
+    /*display: flex;
     height: auto;
     align-items: center;
     justify-content: space-between;
     margin-top: 10px;
-    width: 92%;
+    width: 92%;*/
+}
+
+.vendor-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: none;
+    min-width: 250px;
+    border: solid black 2px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 0px;
+    z-index: 1;
+    margin-top: -18px;
+}
+
+.vendor-dropdown:hover .vendor-dropdown-content {
+  display: block;
 }
 
 .vendor-wrapper-figure {
+    /*margin: 0px;
+    width: 30%;*/
     margin: 0px;
-    width: 30%;
+    margin-top: 0px;
 }
 
 .vendor-option {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     font-size: 28px;
     height: 30px;
-    max-width: 95%;
-    border: solid black 2px;
-    border-radius: 5px;
+    max-width: 100%;
+    border:  2px;
+    border-radius: 0px;
+    color: white;
+    
+}
+
+.vendor-name {
+    font-size: 15px;
+    font-weight: 900;
+    color: white;
+    margin-left: 10px;
+}
+
+.vendor-name-bitcoin {
+    color: black
+}
+
+
+.evilcorp-bg {
+    background-color: #F33355;
+}
+
+.ninja-bg {
+    background-color: #222222;
+}
+
+.bitcoin-bg {
+    background-color: #FFAE34;
+}
+
+.block-chain-bg {
+    background-color: #8B58F9;
+}
+
+.bitcoin {
+    color: black;
+}
+
+.vendor-icon {
+    width: 15px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.vendor-icon-bitcoin {
+    color: black;
 }
 </style>

@@ -1,58 +1,43 @@
 <template>
     <section class="card-stack">
-        <ul>
-            <li 
-                v-for="(card, index) in stContent" 
-                v-bind:key="index"
-                v-bind:index="index"
-            >
-                <header class="card-header">
-                    <section class="header-left-section" v-on:click="activeCard(index)"> <p v-on:click="remove(index)" class="remove">X</p> </section>
-                    <section class="header-right-section" v-on:click="activeCard(index)"> <p class="header-vendor"> {{ card.cardVendor }} </p> </section>
-                </header>
-                <main class="card-main" v-on:click="activeCard(index)"> {{ card.cardNumber }} </main>
-                <footer v-on:click="activeCard(index)" class="card-footer">
-                    <div class="card-owner">
-                        <h3 class="card-holder-title">CARDHOLDER NAME</h3>
-                        <h3 class="card-exp-title">VALID THRU</h3>
-                    </div>
-                    <div class="card-owner2">
-                        <h4 class="card-holder-name"> {{card.cardHolder}} </h4>
-                        <h4 class="card-exp-date"> {{card.cardExp}} </h4>
-                    </div>
-                </footer>
-            </li>
-        </ul>
+        <card
+            v-for="(card, index) in storage" 
+            v-bind:key="index"
+            v-bind:index="index"
+            v-bind:cardNr="card.cardNumber"
+            v-bind:cardHolder="card.cardHolder"
+            v-bind:cardExp="card.cardExp"
+            v-bind:cardCcv="card.cardCcv"
+            v-bind:cardVendor="card.cardVendor" 
+            v-bind:cardColor="card.cardColor"
+            v-bind:textColor="card.textColor"
+            v-bind:bin="bin"
+            v-on:click.native="activeCard(index)"
+        />
     </section>
 </template>
 
 <script>
-//import card from '../components/Card'
+import card from '../components/Card'
 
 export default {
     components: {
-      
+        card
     },
     data() {
         return {
-            storage: window.localStorage,
-            stContent: JSON.parse(localStorage.getItem('cards')),
+            //storage: window.localStorage,
+            //stContent: JSON.parse(localStorage.getItem('cards')),
+            bin: true
         }
     },
     props: {
- 
+        storage: Array
     },
     methods: {
         activeCard(index) {
             this.$emit('active-card', index) 
         },
-        remove(index) {
-            const storage = window.localStorage
-            const list = JSON.parse(storage.getItem('cards'))
-            this.$delete(list, index);
-            storage.setItem('cards', JSON.stringify(list));
-            return this.stContent =  JSON.parse(localStorage.getItem('cards'))
-        }
     },
     computed: {
 
@@ -65,10 +50,15 @@ export default {
 
 <style>
 .card-stack{
-    height: 50vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    display: grid;
+    grid-auto-rows: 10px;
+    grid-gap: 1rem;
+    width: 100%;
+    height: 44vh;
+    margin-top: 20px;
 }
 
 ul {
@@ -104,15 +94,5 @@ p {
 .card-nr {
     font-size: 12px;
 }
-.header-left-section {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-.remove {
-    font-weight: 900;
-    font-size: 18px;
-    justify-self: start;
-    margin: 0px 0px 60px 5px;
-}
+
 </style>

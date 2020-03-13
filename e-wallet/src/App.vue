@@ -9,9 +9,6 @@ export default {
     methods: {
     home() {
       this.$router.push('/home')
-    },
-    jodå() {
-      console.log('hej')
     }
   },
   mounted() {
@@ -32,7 +29,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: black;
   height: 100vh;
   width: 40vw;
   background: white;
